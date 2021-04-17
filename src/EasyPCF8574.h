@@ -37,6 +37,11 @@ class EasyPCF8574{
     //! Overriding method, passing pcf_address if more than one is connected
     void setUpBit(uint8_t bit_to_change, uint8_t pcf_addr);
 
+    //! Direct write bit, no matter of actual state
+    void WriteBit(bool value_to_write, uint8_t bit_to_change);
+    //! Overriding method, passing pcf_address if more than one is connected
+    void WriteBit(bool value_to_write, uint8_t bit_to_change, uint8_t pcf_addr);
+
     //! Gets PCF8574 actual value.
     uint8_t getPCFValue();
     //! Overloaded (or 'Overriding'?) method, passing pcf_address if more than one is connected

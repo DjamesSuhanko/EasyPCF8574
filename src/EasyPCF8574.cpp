@@ -54,7 +54,17 @@ void EasyPCF8574::setUpBit(uint8_t bit_to_change){
 }
 
 void EasyPCF8574::setUpBit(uint8_t bit_to_change, uint8_t pcf_addr){
-        this->pcf_last_value = pcf_last_value|(1<<bit_to_change);
+    this->pcf_last_value = pcf_last_value|(1<<bit_to_change);
+    this->setFullValue(this->pcf_last_value, pcf_addr);
+}
+
+void EasyPCF8574::WriteBit(bool value_to_write, uint8_t bit_to_change){
+    this->pcf_last_value = pcf_last_value ^(-value_to_write ^ pcf_last_value) & (1<<bit_to_change);
+    this->setFullValue(this->pcf_last_value);
+}
+
+void EasyPCF8574::WriteBit(bool value_to_write, uint8_t bit_to_change, uint8_t pcf_addr){
+    this->pcf_last_value = pcf_last_value ^(-value_to_write ^ pcf_last_value) & (1<<bit_to_change);
     this->setFullValue(this->pcf_last_value, pcf_addr);
 }
 
@@ -97,6 +107,7 @@ uint8_t EasyPCF8574::getBitValue(uint8_t bit_position, uint8_t pcf_addr){
 bool EasyPCF8574::startI2C(uint8_t sda_pin, uint8_t scl_pin){
     if (Wire.begin(sda_pin,scl_pin)){
         this->started = true;
+        this->setFullValue(this->pcf_last_value);
         return true;
     }
 }
@@ -104,6 +115,7 @@ bool EasyPCF8574::startI2C(uint8_t sda_pin, uint8_t scl_pin){
 bool EasyPCF8574::startI2C(){
     if (Wire.begin()){
         this->started = true;
+        this->setFullValue(this->pcf_last_value);
         return true;
     }
 }
